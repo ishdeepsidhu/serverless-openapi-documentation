@@ -1,4 +1,4 @@
-import { IDefinition, IDefinitionConfig, IServerlessFunctionConfig } from './types';
+import { IDefinition, IDefinitionConfig, IDefinitionType, IServerlessFunctionConfig } from './types';
 export declare class DefinitionGenerator {
     version: string;
     definition: IDefinition;
@@ -19,7 +19,7 @@ export declare class DefinitionGenerator {
      * Add Paths to OpenAPI Configuration from Serverless function documentation
      * @param config Add
      */
-    readFunctions(config: IServerlessFunctionConfig[]): void;
+    readFunctions(config: IServerlessFunctionConfig[], cliConfig: IDefinitionType): void;
     /**
      * Cleans schema objects to make them OpenAPI compatible
      * @param schema JSON Schema Object

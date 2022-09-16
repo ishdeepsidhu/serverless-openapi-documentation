@@ -44,8 +44,14 @@ describe('OpenAPI Documentation Generator', () => {
                 const func = sls.service.getFunction(functionName);
                 return utils_1.merge({ _functionName: functionName }, func);
             });
+            const config = {
+                eventType: 'httpApi',
+                file: 'openapi.yml',
+                format: 'yaml',
+                indent: 1
+            };
             // Add Paths to OpenAPI Output from Function Configuration
-            docGen.readFunctions(funcConfigs);
+            docGen.readFunctions(funcConfigs, config);
             expect(docGen.definition).not.toBeNull();
             expect(docGen.definition).toMatchSnapshot();
         }

@@ -2,7 +2,7 @@ import { dereference } from '@jdw/jst';
 // tslint:disable-next-line no-submodule-imports
 import { validateSync as openApiValidatorSync } from 'swagger2openapi/validate';
 import * as uuid from 'uuid';
-import { IDefinition, IDefinitionConfig, IOperation, IParameterConfig, IServerlessFunctionConfig } from './types';
+import { IDefinition, IDefinitionConfig, IDefinitionType, IOperation, IParameterConfig, IServerlessFunctionConfig } from './types';
 import { clone, isIterable, merge } from './utils';
 
 export class DefinitionGenerator {
@@ -81,11 +81,11 @@ export class DefinitionGenerator {
    * Add Paths to OpenAPI Configuration from Serverless function documentation
    * @param config Add
    */
-  public readFunctions (config: IServerlessFunctionConfig[]): void {
+  public readFunctions (config: IServerlessFunctionConfig[],cliConfig:IDefinitionType): void {
     // loop through function configurations
     for (const funcConfig of config) {
       // loop through http events
-      for (const httpEvent of this.getHttpEvents(funcConfig.events)) {
+      for (const httpEvent of this.getHttpEvents(funcConfig.events,cliConfig.eventType)) {
         const httpEventConfig = httpEvent.http;
 
         if (httpEventConfig.documentation) {
@@ -362,7 +362,7 @@ export class DefinitionGenerator {
     return content;
   }
 
-  private getHttpEvents (funcConfig) {
-    return funcConfig.filter((event) => event.http ? true : false);
+  private getHttpEvents (funcConfig,eventType:string) {
+    return funcConfig.filter((event) => event[eventType] ? true : false);
   }
 }

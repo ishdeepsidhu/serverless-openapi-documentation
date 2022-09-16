@@ -44,6 +44,10 @@ class ServerlessOpenApiDocumentation {
                                 usage: 'File indentation in spaces [default: 2]',
                                 shortcut: 'i',
                             },
+                            ["event"]: {
+                                usage: 'If you want to use http or httpApi',
+                                shortcut: 'e',
+                            }
                         },
                     },
                 },
@@ -63,9 +67,11 @@ class ServerlessOpenApiDocumentation {
             format: 'yaml',
             file: 'openapi.yml',
             indent: 2,
+            eventType: 'httpApi'
         };
         config.indent = this.serverless.processedInput.options.indent || 2;
         config.format = this.serverless.processedInput.options.format || 'yaml';
+        config.eventType = this.serverless.processedInput.options.event || 'httpApi';
         if (['yaml', 'json'].indexOf(config.format.toLowerCase()) < 0) {
             throw new Error('Invalid Output Format Specified - must be one of "yaml" or "json"');
         }
@@ -87,10 +93,10 @@ class ServerlessOpenApiDocumentation {
             const func = this.serverless.service.getFunction(functionName);
             return utils_1.merge({ _functionName: functionName }, func);
         });
-        // Add Paths to OpenAPI Output from Function Configuration
-        generator.readFunctions(funcConfigs);
         // Process CLI Input options
         const config = this.processCliInput();
+        // Add Paths to OpenAPI Output from Function Configuration
+        generator.readFunctions(funcConfigs, config);
         this.log(`${c.bold.yellow('[VALIDATION]')} Validating OpenAPI generated output\n`);
         const validation = generator.validate();
         if (validation.valid) {

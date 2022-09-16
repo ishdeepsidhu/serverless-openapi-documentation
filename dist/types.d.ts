@@ -24,6 +24,7 @@ export interface IDefinitionType {
     file: string;
     format: 'yaml' | 'json';
     indent: number;
+    eventType: string;
 }
 export interface IServerlessFunctionConfig {
     _functionName: string;

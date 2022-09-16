@@ -1,6 +1,7 @@
 import * as path from 'path';
 import * as Serverless from 'serverless';
 import { DefinitionGenerator } from '../DefinitionGenerator';
+import { IDefinitionType } from '../types';
 import { merge } from '../utils';
 
 class ServerlessInterface extends Serverless {
@@ -36,9 +37,14 @@ describe('OpenAPI Documentation Generator', () => {
         const func = sls.service.getFunction(functionName);
         return merge({ _functionName: functionName }, func);
       });
-
+      const config: IDefinitionType = {
+        eventType: 'httpApi',
+        file:'openapi.yml',
+        format:'yaml',
+        indent: 1
+      }
       // Add Paths to OpenAPI Output from Function Configuration
-      docGen.readFunctions(funcConfigs);
+      docGen.readFunctions(funcConfigs,config);
 
       expect(docGen.definition).not.toBeNull();
       expect(docGen.definition).toMatchSnapshot();

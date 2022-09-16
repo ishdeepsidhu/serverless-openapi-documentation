@@ -71,11 +71,11 @@ class DefinitionGenerator {
      * Add Paths to OpenAPI Configuration from Serverless function documentation
      * @param config Add
      */
-    readFunctions(config) {
+    readFunctions(config, cliConfig) {
         // loop through function configurations
         for (const funcConfig of config) {
             // loop through http events
-            for (const httpEvent of this.getHttpEvents(funcConfig.events)) {
+            for (const httpEvent of this.getHttpEvents(funcConfig.events, cliConfig.eventType)) {
                 const httpEventConfig = httpEvent.http;
                 if (httpEventConfig.documentation) {
                     // Build OpenAPI path configuration structure for each method
@@ -301,8 +301,8 @@ class DefinitionGenerator {
         }
         return content;
     }
-    getHttpEvents(funcConfig) {
-        return funcConfig.filter((event) => event.http ? true : false);
+    getHttpEvents(funcConfig, eventType) {
+        return funcConfig.filter((event) => event[eventType] ? true : false);
     }
 }
 exports.DefinitionGenerator = DefinitionGenerator;

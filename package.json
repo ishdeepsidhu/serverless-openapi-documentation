@@ -31,7 +31,7 @@
     "test:prepare": "scripts/prepareTests.bash",
     "build:link": "npm run build && cd build && npm run link",
     "build:watch": "npm run build && tsc --watch",
-    "build": "scripts/build.bash",
+    "build": "bash scripts/build.bash",
     "prepare": "npm run build"
   },
   "devDependencies": {
